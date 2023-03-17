@@ -6,6 +6,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\App\Request\Http;
 
 class AddCustomLayout implements ObserverInterface
 {
@@ -19,17 +20,25 @@ class AddCustomLayout implements ObserverInterface
     protected $layout;
 
     /**
+     * @var Http
+     */
+    protected $request;
+
+    /**
      * AddCustomLayout constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param LayoutInterface $layout
+     * @param Http $request
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        LayoutInterface $layout
+        LayoutInterface $layout,
+        Http $request
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->layout = $layout;
+        $this->request = $request;
     }
 
     /**
@@ -42,7 +51,10 @@ class AddCustomLayout implements ObserverInterface
         if (!$this->scopeConfig->isSetFlag('rvsmedia_categoryproductslider/general/enabled')) {
             return;
         }
-        $this->layout->getUpdate()->addHandle('catalog_custom_view');
-        $this->layout->generateXml();
+        $action_name = $this->request->getFullActionName();
+        if ($action_name=="catalog_category_view") {
+            $this->layout->getUpdate()->addHandle('catalog_custom_view');
+            $this->layout->generateXml();
+        }
     }
 }

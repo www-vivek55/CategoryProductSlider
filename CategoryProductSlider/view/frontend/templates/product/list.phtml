@@ -69,7 +69,15 @@ $_viewModel = $block->getData('view_model');
                              class="custom-category product-image-slider-category owl-carousel">
                             <?php
                             foreach ($images as $image) { ?>
-                                <div class="item"><img src="<?= /* @noEscape */ $image->getUrl(); ?>" ></div>
+                                <div class="item">
+                                    <?php $resizedImage = $_viewModel->resizeListImage(
+                                        $_product,
+                                        $image->getFile(),
+                                        300,
+                                        400
+                                    );?>
+                                    <img src="<?= /* @noEscape */ $resizedImage ?>" >
+                                </div>
                             <?php }
                             ?>
                         </div>
