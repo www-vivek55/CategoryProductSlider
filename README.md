@@ -1,1 +1,1 @@
-# RvsMedia
+# CategoryProductSlider
